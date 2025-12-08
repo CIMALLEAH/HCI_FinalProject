@@ -71,7 +71,7 @@
   .header-right{display:flex;gap:12px;align-items:center}
   .notification-btn{position:relative;cursor:pointer;padding:8px;font-size:18px}
   .notification-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:#ff4444;border-radius:50%}
-  .profile-icon{position:relative;width:40px;height:40px;border-radius:50%;overflow:visible;border:1px solid rgba(255,255,255,0.15);cursor:pointer}
+  .profile-icon{position:relative;width:40px;height:40px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,255,255,0.15);cursor:pointer}
   .profile-icon img{width:100%;height:100%;object-fit:cover;border-radius:50%}
   .profile-tooltip{position:absolute;bottom:-85px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.95);padding:12px 14px;border-radius:8px;font-size:12px;opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:9999;text-align:center;min-width:150px;white-space:normal}
   .profile-tooltip-name{font-weight:700;margin-bottom:6px}
@@ -470,7 +470,7 @@
 let events = [
   {
     id: 1,
-    kind: 'event', // 'event' or 'task'
+    kind: 'event',
     category: 'school',
     type: 'school',
     title: 'IT 321',
@@ -580,7 +580,6 @@ let events = [
     reminder: '1d',
     completed: false
   },
-  // example tasks
   {
     id: 8,
     kind: 'task',
@@ -612,6 +611,22 @@ let events = [
     priority: 'low',
     reminder: 'none',
     completed: true
+  },
+  {
+    id: 10,
+    kind: 'event',
+    category: 'work',
+    type: 'work',
+    title: 'Team Meeting',
+    fullTitle: 'Weekly sync meeting',
+    location: 'Office',
+    startDate: '2025-12-08',
+    startTime: '10:00',
+    endDate: '2025-12-08',
+    endTime: '11:00',
+    priority: 'high',
+    reminder: '30m',
+    completed: false
   }
 ];
 
@@ -619,7 +634,7 @@ let events = [
    App state
    ========================= */
 let state = {
-  filter: 'all', // all | task | event | completed
+  filter: 'all',
   sort: 'date',
   editingId: null
 }
@@ -636,10 +651,18 @@ const overlayTitle = document.getElementById('overlayTitle');
 const itemForm = document.getElementById('itemForm');
 const deleteModal = document.getElementById('deleteModal');
 
+function getIconForCategory(category) {
+  switch(category) {
+    case 'school': return 'fa-graduation-cap';
+    case 'work': return 'fa-briefcase';
+    case 'personal': return 'fa-user';
+    default: return 'fa-circle';
+  }
+}
+
 function formatDate(dateStr){
   if(!dateStr) return '';
   const d = new Date(dateStr + 'T00:00');
-  // en-GB format day/month/year
   return d.toLocaleDateString('en-GB');
 }
 
@@ -673,7 +696,6 @@ function renderTodayPanel(){
   const in7days = new Date();
   in7days.setDate(now.getDate() + 7);
 
-  // Filter items
   const items = events.filter(ev=>{
     const start = new Date(ev.startDate + 'T00:00');
     const isToday = start.getTime() === now.getTime();
@@ -719,15 +741,12 @@ function renderNotifications(){
 }
 
 function renderPlanner(){
-  // filter & sort
   let items = [...events];
   
-  // Handle hierarchical filters
   const now = new Date();
   now.setHours(0,0,0,0);
   
   if(state.filter === 'all'){
-    // show all items (no filter)
   } else if(state.filter === 'all-tasks'){
     items = items.filter(i => i.kind === 'task');
   } else if(state.filter === 'all-events'){
@@ -752,17 +771,13 @@ function renderPlanner(){
     items = items.filter(i => i.completed && i.kind === 'event');
   }
 
-  // Sort by completion status then by date
   items.sort((a,b)=>{
-    // Incomplete items first, then completed
     if(a.completed !== b.completed) return a.completed ? 1 : -1;
-    // Then sort by date
     const da = new Date((a.startDate||'1970-01-01') + 'T' + (a.startTime||'00:00'));
     const db = new Date((b.startDate||'1970-01-01') + 'T' + (b.startTime||'00:00'));
     return da - db;
   });
 
-  // Group by month
   const grouped = {};
   items.forEach(item => {
     const date = new Date(item.startDate + 'T00:00');
@@ -771,7 +786,6 @@ function renderPlanner(){
     grouped[monthKey].push(item);
   });
 
-  // build HTML
   if(items.length === 0){
     plannerList.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,0.5)">No items found.</div>';
     return;
@@ -783,7 +797,7 @@ function renderPlanner(){
     grouped[monthKey].forEach(ev => {
       const badge = getBadgeForEvent(ev);
       const indicatorColor = ev.category === 'personal' ? '#9b59b6' : ev.category === 'work' ? '#1d9a66' : '#4a9eff';
-      const typeIcon = ev.kind === 'task' ? 'fa-list-check' : 'fa-graduation-cap';
+      const typeIcon = ev.kind === 'task' ? 'fa-list-check' : getIconForCategory(ev.category);
       const typeName = ev.kind === 'task' ? 'Task' : 'Event';
       const completedCls = ev.completed ? 'completed' : '';
       html += `<div class="event-item ${ev.category} ${completedCls}" data-id="${ev.id}">
@@ -818,7 +832,6 @@ function renderPlanner(){
   });
   plannerList.innerHTML = html;
 
-  // attach handlers (delegation)
   document.querySelectorAll('.action-btn.edit').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
       const id = Number(btn.dataset.id);
@@ -908,7 +921,6 @@ btnTypeEls.forEach(b=>{
     b.classList.add('primary');
     document.querySelectorAll('.btnType').forEach(btn=>btn.classList.remove('primary'));
     b.classList.add('primary');
-    // also toggle priority visibility
     setFormKind(b.dataset.type);
   });
 });
@@ -917,20 +929,16 @@ function openOverlay(mode='add', id=null){
   state.editingId = (mode==='edit'?id:null);
   overlay.classList.add('active');
   overlayTitle.textContent = mode === 'add' ? 'Add item' : 'Edit item';
-  // reset
   itemForm.reset();
   document.querySelectorAll('.btnType').forEach(bt=>bt.classList.remove('primary'));
-  // choose default by mode
   if(mode === 'add'){
     document.querySelector('.btnType[data-type="event"]').classList.add('primary');
     setFormKind('event');
     document.getElementById('priorityLabel').style.display = 'none';
     document.getElementById('priority').style.display = 'none';
-    // Ensure bulk options are reset when opening add form
     const bt = document.getElementById('bulkToggle'); if(bt) bt.checked = false;
     const bo = document.getElementById('bulkOptions'); if(bo) bo.style.display = 'none';
   } else {
-    // prefill values
     const ev = events.find(x=>x.id === id);
     if(!ev) return;
     const typeBtn = document.querySelector(`.btnType[data-type="${ev.kind}"]`);
@@ -949,7 +957,7 @@ function openOverlay(mode='add', id=null){
     document.getElementById('endTime').value = ev.endTime || '';
     document.getElementById('mode').value = ev.mode || 'online';
     document.getElementById('completedFlag').checked = !!ev.completed;
-    renderModeFields(); // show appropriate fields
+    renderModeFields();
   }
 }
 
@@ -958,7 +966,6 @@ function closeOverlay(){
   state.editingId = null;
 }
 
-/* form kind: show/hide priority etc */
 function setFormKind(kind){
   const priorityLabel = document.getElementById('priorityLabel');
   const priorityEl = document.getElementById('priority');
@@ -971,7 +978,6 @@ function setFormKind(kind){
   }
 }
 
-/* Mode dependent fields (location vs link) */
 document.getElementById('mode').addEventListener('change', renderModeFields);
 function renderModeFields(){
   const mode = document.getElementById('mode').value;
@@ -1000,7 +1006,6 @@ function renderModeFields(){
   }
 }
 
-/* Save form (add or update) */
 itemForm.addEventListener('submit', function(e){
   e.preventDefault();
   const kind = document.querySelector('.btnType.primary')?.dataset.type || 'event';
@@ -1015,6 +1020,7 @@ itemForm.addEventListener('submit', function(e){
       title: title,
       fullTitle: document.getElementById('description').value.trim(),
       category: document.getElementById('category').value,
+      type: document.getElementById('category').value,
       priority: document.getElementById('priority').value,
       reminder: document.getElementById('reminder').value,
       repeat: document.getElementById('repeat').value,
@@ -1036,7 +1042,6 @@ itemForm.addEventListener('submit', function(e){
     return;
   }
 
-  // Bulk semester schedule flow
   const semStartStr = document.getElementById('semStart')?.value;
   const semEndStr = document.getElementById('semEnd')?.value;
   if(!semStartStr || !semEndStr){ alert('Please provide semester start and end dates'); return; }
@@ -1052,12 +1057,12 @@ itemForm.addEventListener('submit', function(e){
     weekB[d] = document.getElementById('weekB_'+d)?.value || 'none';
   });
 
-  // Base payload fields used for every generated event
   const base = {
     kind: kind,
     title: title,
     fullTitle: document.getElementById('description').value.trim(),
     category: document.getElementById('category').value,
+    type: document.getElementById('category').value,
     priority: document.getElementById('priority').value,
     reminder: document.getElementById('reminder').value,
     repeat: document.getElementById('repeat').value,
@@ -1066,15 +1071,13 @@ itemForm.addEventListener('submit', function(e){
     completed: document.getElementById('completedFlag').checked
   };
 
-  // Safety cap to avoid extremely large imports
   const MAX_EVENTS = 500;
   let created = 0;
 
-  // iterate date by date
   const msPerDay = 24*60*60*1000;
   let cur = new Date(semStart.getTime());
   while(cur <= semEnd){
-    const dow = cur.getDay(); // 0 Sun .. 6 Sat
+    const dow = cur.getDay();
     if(dow >= 1 && dow <=5){
       const weekOffset = Math.floor((cur - semStart) / (7*msPerDay));
       const template = (weekOffset % 2 === 0) ? weekA : weekB;
@@ -1110,12 +1113,10 @@ document.getElementById('filterSelect').addEventListener('change', function(e){
   renderPlanner();
 });
 
-/* notifications toggle */
 document.getElementById('notifBtn').addEventListener('click', ()=>{
   notificationPanel.classList.toggle('active');
 });
 
-/* close notif when click outside */
 document.addEventListener('click', (e)=>{
   const panel = document.getElementById('notificationPanel');
   const btn = document.getElementById('notifBtn');
@@ -1124,17 +1125,14 @@ document.addEventListener('click', (e)=>{
   }
 });
 
-/* Profile click redirect */
 document.getElementById('profileIcon').addEventListener('click', ()=>{
   window.location.href = 'account.html';
 });
 
-/* init */
 renderNotifications();
 renderPlanner();
 renderModeFields();
 
-// Bulk options toggle behavior: show/hide bulkOptions
 const bulkToggleEl = document.getElementById('bulkToggle');
 if(bulkToggleEl){
   bulkToggleEl.addEventListener('change', (e)=>{
@@ -1193,6 +1191,7 @@ importFile.addEventListener('change', function(e) {
             title: item.title,
             fullTitle: item.fullTitle || '',
             category: item.category || 'school',
+            type: item.type || item.category || 'school',
             priority: item.priority || 'medium',
             reminder: item.reminder || 'none',
             repeat: item.repeat || 'none',
@@ -1238,7 +1237,6 @@ function parseCSV(csvText) {
   return data;
 }
 
-/* close overlay on ESC */
 window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeOverlay(); });
 
 </script>
