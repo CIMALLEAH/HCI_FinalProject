@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="g2" x1="0" x2="1">
+      <stop stop-color="#4a9eff" offset="0"/>
+      <stop stop-color="#6fb1ff" offset="1"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" rx="24" fill="url(#g2)" />
+  <text x="50%" y="54%" font-family="Comic Sans MS, sans-serif" font-weight="700" font-size="48" fill="#fff" text-anchor="middle" dominant-baseline="middle">PE</text>
+</svg>
