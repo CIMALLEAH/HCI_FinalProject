@@ -5,14 +5,422 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PlanEase - Account</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css">
-  <script src="data.js"></script>
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      background-attachment: fixed;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Scrollbar styling */
+    .app-container::-webkit-scrollbar {
+      width: 10px;
+    }
+    .app-container::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      margin-top: 80px;
+      margin-bottom: 80px;
+    }
+    .app-container::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #4a9eff, #7e22ce);
+      border-radius: 10px;
+    }
+    .app-container::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #6ab5ff, #9d4edd);
+    }
+
+    .app-container {
+      width: 100%;
+      height: 100vh;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 28px;
+      background: rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(8px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      z-index: 1100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .logo-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .logo-text h1 {
+      font-size: 18px;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    .logo-text p {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .notification-btn {
+      position: relative;
+      cursor: pointer;
+      padding: 8px;
+      font-size: 18px;
+    }
+
+    .notification-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      background: #ff4444;
+      border-radius: 50%;
+      display: none;
+    }
+
+    .profile-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .profile-icon .initials {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    /* Notification panel */
+    .notification-panel {
+      position: fixed;
+      top: 80px;
+      right: 28px;
+      width: 360px;
+      max-width: 90%;
+      background: rgba(30, 30, 60, 0.95);
+      padding: 16px;
+      border-radius: 12px;
+      z-index: 1200;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      max-height: calc(100vh - 160px);
+      overflow-y: auto;
+      display: none;
+    }
+
+    .notification-panel.active {
+      display: block;
+    }
+
+    .notification-panel h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .notification-item {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border-left: 3px solid #4a9eff;
+    }
+
+    .notification-item.unread {
+      background: rgba(74, 158, 255, 0.12);
+      border-left-color: #ff9d00;
+    }
+
+    /* Content */
+    .content {
+      padding: 18px 28px;
+      padding-bottom: 24px;
+    }
+
+    .planner-header {
+      margin-bottom: 20px;
+    }
+
+    .planner-header h1 {
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    /* Profile section */
+    .profile-section {
+      background: rgba(30, 30, 70, 0.5);
+      border-radius: 24px;
+      padding: 32px 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .profile-avatar .initials {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 48px;
+    }
+
+    .profile-name {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .profile-email {
+      font-size: 14px;
+      opacity: 0.85;
+      margin-bottom: 8px;
+    }
+
+    .account-created {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    /* Settings section */
+    .settings-section {
+      background: rgba(30, 30, 70, 0.5);
+      border-radius: 24px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .settings-header {
+      padding: 18px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .settings-header:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .settings-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .expand-icon {
+      transition: transform 0.3s;
+    }
+
+    .settings-header.expanded .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .settings-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .setting-item {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .setting-item:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .setting-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .setting-value {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    /* Toggle switch */
+    .toggle-switch {
+      width: 50px;
+      height: 26px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 13px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toggle-switch.active {
+      background: #4a9eff;
+    }
+
+    .toggle-slider {
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+    }
+
+    .toggle-switch.active .toggle-slider {
+      transform: translateX(24px);
+    }
+
+    /* Logout button */
+    .logout-btn {
+      width: 100%;
+      padding: 16px;
+      background: rgba(255, 68, 68, 0.15);
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      border-radius: 20px;
+      color: #ff6b6b;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s;
+      margin-top: 20px;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 68, 68, 0.25);
+      transform: translateY(-2px);
+    }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: rgba(12, 12, 30, 0.95);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      z-index: 1100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 12px;
+      transition: all 0.3s;
+    }
+
+    .nav-item:hover {
+      color: #4a9eff;
+    }
+
+    .nav-item.active {
+      color: #4a9eff;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+  </style>
 </head>
 <body>
   <div class="app-container">
     <div class="header">
       <div class="logo">
-  <img src="assets/logo.svg" alt="PlanEase Logo" class="logo-img">
+        <div class="logo-img">
+          <img src="assets/logo.png" alt="PlanEase Logo">
+        </div>
         <div class="logo-text">
           <h1>PLAN EASE</h1>
           <p>Plan with Ease</p>
@@ -24,7 +432,7 @@
           <div class="notification-dot" id="notificationDot"></div>
         </div>
         <div class="profile-icon" onclick="window.location.href='account.html'">
-          <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;" id="profileInitial"></div>
+          <div class="initials" id="profileInitial">D</div>
         </div>
       </div>
     </div>
@@ -41,11 +449,11 @@
 
       <div class="profile-section">
         <div class="profile-avatar">
-          <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 48px;" id="profileInitialLarge"></div>
+          <div class="initials" id="profileInitialLarge">D</div>
         </div>
-        <div class="profile-name" id="profileName"></div>
-        <div class="profile-email" id="profileEmail"></div>
-        <div class="account-created" id="accountCreated"></div>
+        <div class="profile-name" id="profileName">Damian Alvah</div>
+        <div class="profile-email" id="profileEmail">dalvah@gmail.com</div>
+        <div class="account-created" id="accountCreated">Member since December 2024</div>
       </div>
 
       <div class="settings-section">
@@ -77,9 +485,9 @@
               <div class="toggle-slider"></div>
             </div>
           </div>
-           <div class="setting-item">
+          <div class="setting-item">
             <div class="setting-label">Default Reminder</div>
-            <div class="setting-value" id="reminderTime"></div>
+            <div class="setting-value" id="reminderTime">30 minutes before</div>
           </div>
         </div>
       </div>
@@ -110,12 +518,26 @@
   </div>
 
   <script>
+    const AppData = {
+      user: {
+        firstName: 'Damian',
+        lastName: 'Alvah',
+        email: 'dalvah@gmail.com',
+        accountCreated: '2024-12-01'
+      },
+      settings: {
+        notifications: {
+          enabled: true,
+          sound: true,
+          vibrate: false,
+          defaultReminder: '30 minutes before'
+        }
+      },
+      conflicts: []
+    };
+
     window.addEventListener('DOMContentLoaded', () => {
-      if (typeof AppData !== 'undefined') {
-        renderPage();
-      } else {
-        document.querySelector('.content').innerHTML = '<p style="text-align:center; color: white;">Error: AppData is not loaded.</p>';
-      }
+      renderPage();
     });
 
     function renderPage() {
@@ -127,7 +549,7 @@
 
     function renderHeader() {
       document.getElementById('profileInitial').textContent = AppData.user.firstName.charAt(0);
-       const hasConflicts = AppData.conflicts && AppData.conflicts.length > 0;
+      const hasConflicts = AppData.conflicts && AppData.conflicts.length > 0;
       document.getElementById('notificationDot').style.display = hasConflicts ? 'block' : 'none';
     }
 
@@ -136,34 +558,32 @@
       document.getElementById('profileInitialLarge').textContent = user.firstName.charAt(0);
       document.getElementById('profileName').textContent = `${user.firstName} ${user.lastName}`;
       document.getElementById('profileEmail').textContent = user.email;
-      document.getElementById('accountCreated').textContent = `Member since ${AppData.formatDate(user.accountCreated)}`;
+      const date = new Date(user.accountCreated);
+      const formatted = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      document.getElementById('accountCreated').textContent = `Member since ${formatted}`;
     }
 
     function renderSettings() {
-        const notifToggle = document.getElementById('notifToggle');
-        if (AppData.settings.notifications.enabled) {
-            notifToggle.classList.add('active');
-        } else {
-            notifToggle.classList.remove('active');
-        }
-        document.getElementById('reminderTime').textContent = AppData.settings.notifications.defaultReminder;
+      const notifToggle = document.getElementById('notifToggle');
+      if (AppData.settings.notifications.enabled) {
+        notifToggle.classList.add('active');
+      } else {
+        notifToggle.classList.remove('active');
+      }
+      document.getElementById('reminderTime').textContent = AppData.settings.notifications.defaultReminder;
     }
     
     function toggleSetting(key) {
-        const keys = key.split('.');
-        let setting = AppData.settings;
-        for(let i = 0; i < keys.length - 1; i++) {
-            setting = setting[keys[i]];
-        }
-        setting[keys[keys.length - 1]] = !setting[keys[keys.length - 1]];
-        
-        // Save locally and re-render
-        if (typeof window.saveAppDataToStorage === 'function') {
-          window.saveAppDataToStorage();
-        }
-        console.log(`Setting ${key} changed to ${setting[keys[keys.length - 1]]}`);
-        alert('Settings saved!');
-        renderSettings();
+      const keys = key.split('.');
+      let setting = AppData.settings;
+      for (let i = 0; i < keys.length - 1; i++) {
+        setting = setting[keys[i]];
+      }
+      setting[keys[keys.length - 1]] = !setting[keys[keys.length - 1]];
+      
+      console.log(`Setting ${key} changed to ${setting[keys[keys.length - 1]]}`);
+      alert('Settings saved!');
+      renderSettings();
     }
 
     function toggleSection(header) {
@@ -201,16 +621,17 @@
     }
     
     function logout() {
-        if(confirm('Are you sure you want to log out?')) {
-            // In a real app, you would clear session/token here
-            window.location.href = 'login.html';
-        }
+      if (confirm('Are you sure you want to log out?')) {
+        window.location.href = 'login.html';
+      }
     }
 
     document.addEventListener('click', function(e) {
       const panel = document.getElementById('notificationPanel');
       const notifBtn = document.querySelector('.notification-btn');
-      if (panel.classList.contains('active') && !panel.contains(e.target) && !notifBtn.contains(e.target) && !notifBtn.querySelector('i').contains(e.target)) {
+      if (panel.classList.contains('active') && 
+          !panel.contains(e.target) && 
+          !notifBtn.contains(e.target)) {
         panel.classList.remove('active');
       }
     });
