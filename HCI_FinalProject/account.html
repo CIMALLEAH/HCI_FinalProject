@@ -147,6 +147,12 @@
       font-size: 18px;
     }
 
+    .profile-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     /* Notification panel */
     .notification-panel {
       position: fixed;
@@ -219,8 +225,9 @@
       height: 120px;
       margin: 0 auto 20px;
       border-radius: 50%;
-      overflow: hidden;
+      overflow: visible;
       border: 4px solid rgba(255, 255, 255, 0.15);
+      position: relative;
     }
 
     .profile-avatar .initials {
@@ -233,6 +240,41 @@
       color: white;
       font-weight: bold;
       font-size: 48px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .verified-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 32px;
+      height: 32px;
+      background: #4a9eff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid rgba(30, 30, 70, 0.9);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .verified-badge:hover {
+      background: #6ab5ff;
+      transform: scale(1.1);
+    }
+
+    .verified-badge i {
+      font-size: 14px;
+      color: white;
     }
 
     .profile-name {
@@ -250,6 +292,45 @@
     .account-created {
       font-size: 12px;
       opacity: 0.7;
+    }
+
+    .setting-sublabel {
+      font-size: 12px;
+      opacity: 0.6;
+      margin-top: 2px;
+    }
+
+    .setting-item .fas.fa-chevron-right {
+      opacity: 0.5;
+      font-size: 12px;
+    }
+
+    .settings-section .settings-header h2 i {
+      font-size: 16px;
+    }
+
+    .setting-item.logout-item {
+      color: #ff6b6b;
+      border-top: 1px solid rgba(255, 107, 107, 0.2);
+    }
+
+    .setting-item.logout-item:hover {
+      background: rgba(255, 107, 107, 0.05);
+    }
+
+    .subsection-header {
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0.9;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .subsection-header i {
+      font-size: 12px;
     }
 
     /* Settings section */
@@ -374,6 +455,126 @@
       transform: translateY(-2px);
     }
 
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #2a3f5f, #1e3c72);
+      padding: 24px;
+      border-radius: 16px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-content h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .modal-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .modal-btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .modal-btn.cancel {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .modal-btn.cancel:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .modal-btn.confirm {
+      background: #4a9eff;
+      color: #fff;
+    }
+
+    .modal-btn.confirm:hover {
+      background: #6ab5ff;
+      transform: scale(1.05);
+    }
+
+    .modal-select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .modal-select option {
+      background: #1a1a2e;
+      color: #fff;
+    }
+
+    .modal-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .modal-checkbox input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .modal-info {
+      background: rgba(74, 158, 255, 0.1);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      border-left: 3px solid #4a9eff;
+    }
+
     /* Bottom nav */
     .bottom-nav {
       position: fixed;
@@ -432,7 +633,8 @@
           <div class="notification-dot" id="notificationDot"></div>
         </div>
         <div class="profile-icon" onclick="window.location.href='account.html'">
-          <div class="initials" id="profileInitial">D</div>
+          <img src="assets/profile_pic.png" alt="Profile" id="profileIconImg" onerror="this.style.display='none'; document.getElementById('profileInitial').style.display='flex';">
+          <div class="initials" id="profileInitial" style="display: none;">D</div>
         </div>
       </div>
     </div>
@@ -449,26 +651,48 @@
 
       <div class="profile-section">
         <div class="profile-avatar">
-          <div class="initials" id="profileInitialLarge">D</div>
+          <img src="assets/profile_pic.png" alt="Profile Picture" id="profileImage" onerror="this.style.display='none'; document.getElementById('profileInitialLarge').style.display='flex';">
+          <div class="initials" id="profileInitialLarge" style="display: none;">D</div>
+          <div class="verified-badge" onclick="changeProfilePicture()" title="Change Profile Picture">
+            <i class="fas fa-camera"></i>
+          </div>
         </div>
         <div class="profile-name" id="profileName">Damian Alvah</div>
         <div class="profile-email" id="profileEmail">dalvah@gmail.com</div>
-        <div class="account-created" id="accountCreated">Member since December 2024</div>
+        <div class="account-created" id="accountCreated">Account Created October 1, 2025</div>
       </div>
 
       <div class="settings-section">
         <div class="settings-header" onclick="toggleSection(this)">
-          <h2><i class="fas fa-cog"></i> General Settings</h2>
-          <span class="expand-icon"><i class="fas fa-chevron-down"></i></span>
+          <h2><i class="fas fa-cog"></i> Settings</h2>
+          <span class="expand-icon"><i class="fas fa-chevron-up"></i></span>
         </div>
-        <div class="settings-content">
+        <div class="settings-content" style="max-height: 1000px;">
+          <div class="subsection-header">
+            <i class="fas fa-user"></i> Account Settings
+          </div>
           <div class="setting-item" onclick="alert('Edit Profile feature coming soon!')">
-            <div class="setting-label">Edit Profile</div>
+            <div>
+              <div class="setting-label">Edit Profile</div>
+            </div>
             <div class="setting-value"><i class="fas fa-chevron-right"></i></div>
           </div>
-          <div class="setting-item" onclick="alert('Change Password feature coming soon!')">
-            <div class="setting-label">Change Password</div>
+          <div class="setting-item" onclick="openChangePasswordModal()">
+            <div>
+              <div class="setting-label">Change Password</div>
+            </div>
             <div class="setting-value"><i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="openManageAccountModal()">
+            <div>
+              <div class="setting-label">Manage Account</div>
+            </div>
+            <div class="setting-value"><i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item logout-item" onclick="logout()">
+            <div>
+              <div class="setting-label"><i class="fas fa-sign-out-alt"></i> Logout</div>
+            </div>
           </div>
         </div>
       </div>
@@ -476,25 +700,72 @@
       <div class="settings-section">
         <div class="settings-header" onclick="toggleSection(this)">
           <h2><i class="fas fa-bell"></i> Notifications</h2>
-          <span class="expand-icon"><i class="fas fa-chevron-down"></i></span>
+          <span class="expand-icon"><i class="fas fa-chevron-up"></i></span>
         </div>
-        <div class="settings-content">
+        <div class="settings-content" style="max-height: 1000px;">
           <div class="setting-item">
-            <label for="notifToggle" class="setting-label">Enable Notifications</label>
-            <div class="toggle-switch" id="notifToggle" onclick="toggleSetting('notifications.enabled')">
+            <div>
+              <div class="setting-label">Enable Notifications</div>
+              <div class="setting-sublabel">Allow app to send notifications</div>
+            </div>
+            <div class="toggle-switch active" id="notifToggle" onclick="toggleSetting('notifications.enabled')">
               <div class="toggle-slider"></div>
             </div>
           </div>
-          <div class="setting-item">
-            <div class="setting-label">Default Reminder</div>
-            <div class="setting-value" id="reminderTime">30 minutes before</div>
+          <div class="setting-item" onclick="openReminderTimeModal()">
+            <div>
+              <div class="setting-label">Default Reminder Time</div>
+              <div class="setting-sublabel" id="reminderTime">1 hour before</div>
+            </div>
+            <div class="setting-value"><i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="openReminderTypeModal()">
+            <div>
+              <div class="setting-label">Reminder Type</div>
+              <div class="setting-sublabel" id="reminderType">Sound & Vibrate</div>
+            </div>
+            <div class="setting-value"><i class="fas fa-chevron-right"></i></div>
           </div>
         </div>
       </div>
-      
-      <button class="logout-btn" onclick="logout()">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </button>
+
+      <div class="settings-section">
+        <div class="settings-header" onclick="toggleSection(this)">
+          <h2><i class="fas fa-sliders-h"></i> General Preferences</h2>
+          <span class="expand-icon"><i class="fas fa-chevron-up"></i></span>
+        </div>
+        <div class="settings-content" style="max-height: 1000px;">
+          <div class="setting-item" onclick="alert('View settings coming soon!')">
+            <div>
+              <div class="setting-label">Default View on Launch</div>
+              <div class="setting-sublabel">Home</div>
+            </div>
+            <div class="setting-value"><i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="alert('Time format settings coming soon!')">
+            <div>
+              <div class="setting-label">Time Format</div>
+              <div class="setting-sublabel">12-hour (10:00PM)</div>
+            </div>
+            <div class="setting-value"><i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="alert('Date format settings coming soon!')">
+            <div>
+              <div class="setting-label">Date Format</div>
+              <div class="setting-sublabel">Month DD, YYYY (October 22, 2025)</div>
+            </div>
+            <div class="setting-value"><i class="fas fa-chevron-right"></i></div>
+          </div>
+          <div class="setting-item" onclick="alert('Calendar sync coming soon!')">
+            <div>
+              <div class="setting-label">Auto - Sync Calendar</div>
+            </div>
+            <div class="toggle-switch active" id="syncToggle" onclick="event.stopPropagation();">
+              <div class="toggle-slider"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="bottom-nav">
@@ -517,13 +788,87 @@
     </div>
   </div>
 
+  <!-- Modals -->
+  <div class="modal-overlay" id="changePasswordModal">
+    <div class="modal-content">
+      <h2>Change Password</h2>
+      <input type="password" class="modal-input" id="currentPassword" placeholder="Current Password">
+      <input type="password" class="modal-input" id="newPassword" placeholder="New Password">
+      <input type="password" class="modal-input" id="confirmPassword" placeholder="Confirm New Password">
+      <div class="modal-actions">
+        <button class="modal-btn cancel" onclick="closeModal('changePasswordModal')">Cancel</button>
+        <button class="modal-btn confirm" onclick="savePassword()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="manageAccountModal">
+    <div class="modal-content">
+      <h2>Manage Account</h2>
+      <div class="modal-info">
+        <strong>Account Information</strong><br>
+        Email: <span id="modalEmail">dalvah@gmail.com</span><br>
+        Member since: <span id="modalCreated">October 1, 2025</span>
+      </div>
+      <div class="modal-checkbox">
+        <input type="checkbox" id="emailNotifications" checked>
+        <label for="emailNotifications">Receive email notifications</label>
+      </div>
+      <div class="modal-checkbox">
+        <input type="checkbox" id="dataSync" checked>
+        <label for="dataSync">Sync data across devices</label>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn cancel" onclick="closeModal('manageAccountModal')">Close</button>
+        <button class="modal-btn confirm" onclick="saveAccountSettings()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="reminderTimeModal">
+    <div class="modal-content">
+      <h2>Default Reminder Time</h2>
+      <select class="modal-select" id="reminderTimeSelect">
+        <option value="5 minutes before">5 minutes before</option>
+        <option value="10 minutes before">10 minutes before</option>
+        <option value="15 minutes before">15 minutes before</option>
+        <option value="30 minutes before">30 minutes before</option>
+        <option value="1 hour before" selected>1 hour before</option>
+        <option value="2 hours before">2 hours before</option>
+        <option value="1 day before">1 day before</option>
+      </select>
+      <div class="modal-actions">
+        <button class="modal-btn cancel" onclick="closeModal('reminderTimeModal')">Cancel</button>
+        <button class="modal-btn confirm" onclick="saveReminderTime()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="reminderTypeModal">
+    <div class="modal-content">
+      <h2>Reminder Type</h2>
+      <div class="modal-checkbox">
+        <input type="checkbox" id="soundCheck" checked>
+        <label for="soundCheck">Sound</label>
+      </div>
+      <div class="modal-checkbox">
+        <input type="checkbox" id="vibrateCheck" checked>
+        <label for="vibrateCheck">Vibrate</label>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn cancel" onclick="closeModal('reminderTypeModal')">Cancel</button>
+        <button class="modal-btn confirm" onclick="saveReminderType()">Save</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const AppData = {
       user: {
         firstName: 'Damian',
         lastName: 'Alvah',
         email: 'dalvah@gmail.com',
-        accountCreated: '2024-12-01'
+        accountCreated: '2025-10-01'
       },
       settings: {
         notifications: {
@@ -559,8 +904,8 @@
       document.getElementById('profileName').textContent = `${user.firstName} ${user.lastName}`;
       document.getElementById('profileEmail').textContent = user.email;
       const date = new Date(user.accountCreated);
-      const formatted = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-      document.getElementById('accountCreated').textContent = `Member since ${formatted}`;
+      const formatted = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('accountCreated').textContent = `Account Created ${formatted}`;
     }
 
     function renderSettings() {
@@ -626,6 +971,36 @@
       }
     }
 
+    function changeProfilePicture() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            // Update profile pictures
+            const profileImg = document.getElementById('profileImage');
+            const headerImg = document.getElementById('profileIconImg');
+            if (profileImg) {
+              profileImg.src = event.target.result;
+              profileImg.style.display = 'block';
+              document.getElementById('profileInitialLarge').style.display = 'none';
+            }
+            if (headerImg) {
+              headerImg.src = event.target.result;
+              headerImg.style.display = 'block';
+              document.getElementById('profileInitial').style.display = 'none';
+            }
+            alert('Profile picture updated successfully!\n\n(Note: Changes are temporary and will reset on page refresh)');
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+      input.click();
+    }
+
     document.addEventListener('click', function(e) {
       const panel = document.getElementById('notificationPanel');
       const notifBtn = document.querySelector('.notification-btn');
@@ -633,6 +1008,110 @@
           !panel.contains(e.target) && 
           !notifBtn.contains(e.target)) {
         panel.classList.remove('active');
+      }
+
+      // Close modals when clicking outside
+      const modals = document.querySelectorAll('.modal-overlay');
+      modals.forEach(modal => {
+        if (modal.classList.contains('active') && e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+    });
+
+    // Modal functions
+    function openChangePasswordModal() {
+      document.getElementById('changePasswordModal').classList.add('active');
+    }
+
+    function openManageAccountModal() {
+      const user = AppData.user;
+      document.getElementById('modalEmail').textContent = user.email;
+      const date = new Date(user.accountCreated);
+      const formatted = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('modalCreated').textContent = formatted;
+      document.getElementById('manageAccountModal').classList.add('active');
+    }
+
+    function openReminderTimeModal() {
+      const currentValue = AppData.settings.notifications.defaultReminder;
+      document.getElementById('reminderTimeSelect').value = currentValue;
+      document.getElementById('reminderTimeModal').classList.add('active');
+    }
+
+    function openReminderTypeModal() {
+      document.getElementById('soundCheck').checked = AppData.settings.notifications.sound;
+      document.getElementById('vibrateCheck').checked = AppData.settings.notifications.vibrate;
+      document.getElementById('reminderTypeModal').classList.add('active');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    function savePassword() {
+      const current = document.getElementById('currentPassword').value;
+      const newPass = document.getElementById('newPassword').value;
+      const confirm = document.getElementById('confirmPassword').value;
+
+      if (!current || !newPass || !confirm) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      if (newPass !== confirm) {
+        alert('New passwords do not match');
+        return;
+      }
+
+      if (newPass.length < 6) {
+        alert('Password must be at least 6 characters long');
+        return;
+      }
+
+      alert('Password changed successfully!\n\n(Note: This is a demo - changes are not persisted)');
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+      closeModal('changePasswordModal');
+    }
+
+    function saveAccountSettings() {
+      const emailNotif = document.getElementById('emailNotifications').checked;
+      const dataSync = document.getElementById('dataSync').checked;
+      alert(`Account settings updated!\n\nEmail notifications: ${emailNotif ? 'On' : 'Off'}\nData sync: ${dataSync ? 'On' : 'Off'}\n\n(Note: This is a demo - changes are not persisted)`);
+      closeModal('manageAccountModal');
+    }
+
+    function saveReminderTime() {
+      const value = document.getElementById('reminderTimeSelect').value;
+      AppData.settings.notifications.defaultReminder = value;
+      document.getElementById('reminderTime').textContent = value;
+      alert('Default reminder time updated to: ' + value);
+      closeModal('reminderTimeModal');
+    }
+
+    function saveReminderType() {
+      const sound = document.getElementById('soundCheck').checked;
+      const vibrate = document.getElementById('vibrateCheck').checked;
+      AppData.settings.notifications.sound = sound;
+      AppData.settings.notifications.vibrate = vibrate;
+      
+      const types = [];
+      if (sound) types.push('Sound');
+      if (vibrate) types.push('Vibrate');
+      const typeText = types.length > 0 ? types.join(' & ') : 'None';
+      
+      document.getElementById('reminderType').textContent = typeText;
+      alert('Reminder type updated to: ' + typeText);
+      closeModal('reminderTypeModal');
+    }
+
+    // Escape key to close modals
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const modals = document.querySelectorAll('.modal-overlay.active');
+        modals.forEach(modal => modal.classList.remove('active'));
       }
     });
   </script>
