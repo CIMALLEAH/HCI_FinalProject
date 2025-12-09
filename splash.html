@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlanEase - Loading</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+      background-attachment: fixed;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Loading Screen */
+    .loading-screen {
+      text-align: center;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .loading-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .splash-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+    }
+
+    .splash-logo {
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      margin-bottom: 50px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 15px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3b82f6, #1d9a66);
+      border-radius: 999px;
+      transition: width 0.1s ease;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    .progress-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: 1px;
+    }
+
+    /* Main Splash Screen */
+    .splash-container {
+      text-align: center;
+      padding: 40px;
+      max-width: 600px;
+      width: 90%;
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+    }
+
+    .splash-container.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .logo-wrapper {
+      margin-bottom: 30px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    .logo-image {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .logo-image img {
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
+    }
+
+    .logo-image i {
+      font-size: 60px;
+      color: #4a9eff;
+    }
+
+    h1 {
+      font-size: 48px;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+      font-weight: 700;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .tagline {
+      font-size: 18px;
+      opacity: 0.9;
+      margin-bottom: 50px;
+      letter-spacing: 1px;
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+    }
+
+    .feature {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 15px;
+      flex: 1;
+      min-width: 140px;
+      max-width: 160px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .feature i {
+      font-size: 32px;
+      color: #4a9eff;
+      margin-bottom: 10px;
+    }
+
+    .feature p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 15px 40px;
+      border-radius: 999px;
+      border: none;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #1d9a66);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #3b82f6, #1d9a66);
+      color: #fff;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+    }
+
+    .floating-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .shape {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 50%;
+      animation: float-random 20s infinite ease-in-out;
+    }
+
+    .shape:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: -150px;
+      left: -150px;
+      animation-delay: 0s;
+    }
+
+    .shape:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      bottom: -100px;
+      right: -100px;
+      animation-delay: -5s;
+    }
+
+    .shape:nth-child(3) {
+      width: 150px;
+      height: 150px;
+      top: 50%;
+      right: 10%;
+      animation-delay: -10s;
+    }
+
+    @keyframes float-random {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      33% {
+        transform: translate(30px, -30px) rotate(120deg);
+      }
+      66% {
+        transform: translate(-20px, 20px) rotate(240deg);
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 36px;
+      }
+
+      .splash-logo {
+        font-size: 36px;
+      }
+
+      .tagline {
+        font-size: 16px;
+      }
+
+      .features {
+        gap: 15px;
+      }
+
+      .feature {
+        min-width: 120px;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        font-size: 14px;
+      }
+
+      .splash-icon, .logo-image {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="splash-icon">
+      <img src="assets/logo.png" alt="PlanEase Logo" class="logo-img">
+    </div>
+
+    <div class="splash-logo">PlanEase</div>
+
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+
+    <div class="progress-text">0%</div>
+  </div>
+
+  <!-- Main Splash Screen -->
+  <div class="splash-container" id="splashContainer">
+    <div class="logo-wrapper">
+      <div class="logo-image">
+        <img src="assets/logo.png" alt="PlanEase Logo">
+      </div>
+      <h1>PLAN EASE</h1>
+      <p class="tagline">Plan with Ease</p>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <i class="fas fa-calendar-alt"></i>
+        <p>Smart Calendar</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-tasks"></i>
+        <p>Task Manager</p>
+      </div>
+      <div class="feature">
+        <i class="fas fa-bell"></i>
+        <p>Reminders</p>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <a href="create-account.html" class="btn btn-primary">
+        <i class="fas fa-user-plus"></i>
+        Sign up
+      </a>
+      <a href="login.html" class="btn btn-secondary">
+        <i class="fas fa-sign-in-alt"></i>
+        Login
+      </a>
+    </div>
+  </div>
+
+  <script>
+    let progress = 0;
+    const text = document.querySelector(".progress-text");
+    const fill = document.querySelector(".progress-fill");
+    const loadingScreen = document.getElementById("loadingScreen");
+    const splashContainer = document.getElementById("splashContainer");
+
+    const interval = setInterval(() => {
+      progress++;
+      text.textContent = progress + "%";
+      fill.style.width = progress + "%";
+
+      if (progress >= 100) {
+        clearInterval(interval);
+
+        setTimeout(() => {
+          // Hide loading screen
+          loadingScreen.classList.add('hidden');
+          
+          // Show main splash screen
+          setTimeout(() => {
+            splashContainer.classList.add('visible');
+          }, 100);
+        }, 300);
+      }
+    }, 15);
+  </script>
+</body>
+</html>
